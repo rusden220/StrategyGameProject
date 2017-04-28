@@ -7,19 +7,39 @@ using System.Drawing;
 
 namespace StrategyGame.Render
 {
+	public class RenderFlowSettings
+	{
+		public Size GameLayerSize { get; set; }
+		public Size MenuLayerSize { get; set; }
+		public Point MenuLayerPointRendering { get; set; }
+		public Size MainRenderSize { get; set; }
+	}
     public class RenderFlow
     {
 		private IRenderableFom _renderForm;
+		private Bitmap _gameLayerBitmap;
+		private Bitmap _menuLayerBitmap;
 		private Bitmap _mainBitmap;
-		public RenderFlow(IRenderableFom form)
+		private RenderFlowSettings _renderFlowSettings;
+		public RenderFlow(IRenderableFom form, RenderFlowSettings rfs)
 		{
 			_renderForm = form;
-			_mainBitmap = new Bitmap(form.GetRenderSize().Width, form.GetRenderSize().Height);
+			_renderFlowSettings = rfs;
+			_mainBitmap = new Bitmap(rfs.MainRenderSize.Width, rfs.MainRenderSize.Height);
+			_gameLayerBitmap = new Bitmap(rfs.GameLayerSize.Width, rfs.GameLayerSize.Height);
+			_menuLayerBitmap = new Bitmap(rfs.MenuLayerSize.Width, rfs.MenuLayerSize.Height);
 		}
-		public void Draw(IRenderableObject[] objects)
+		public void DrawGameObjects(IRenderableObject[] objects)
 		{
-			DrawRenderableObject(objects);
-			_renderForm.Redraw(_mainBitmap);
+			DrawRenderableObject(objects);			
+		}
+		public void DrawMenuLayer(IRenderableObject[] objects)
+		{
+
+		}
+		public void Render()
+		{
+			_renderForm.Redraw(_gameLayerBitmap);
 		}
 		public void DrawFps(int fps)
 		{
@@ -27,11 +47,11 @@ namespace StrategyGame.Render
 		}
 		private void DrawRenderableObject(IRenderableObject[] objects)
 		{
-			var g = Graphics.FromImage(_mainBitmap);
+			var g = Graphics.FromImage(_gameLayerBitmap);
 			g.Clear(Color.White);
 			foreach (var obj in objects)
-				g.DrawImage(obj.GetCurrentBitmap(), obj.GetBitmapPoint());
+				g.DrawImage(obj.GetCurrentBitmap(), obj.GetRenderPoint());
+			g.DrawImage(_menuLayerBitmap, 10, 10);		
 		}
-
 	}
 }

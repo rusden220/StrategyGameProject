@@ -11,10 +11,12 @@ namespace StrategyGame.Render
 	{
 		private Bitmap[] _bitmaps;
 		private int _index;
+		private int _timeDuration;
 		public Animator(Bitmap[] bitmaps)
 		{
 			_bitmaps = bitmaps;
 			_index = 0;
+			_timeDuration = 100 / 6;
 		}
 		public bool isAnimatedObject { get; set; }
 		public  Bitmap GetNextAnimatedBitmap()

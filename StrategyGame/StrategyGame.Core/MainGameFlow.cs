@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Drawing;
 
 using StrategyGame.Render;
 using StrategyGame.Core.GameObjects;
+using StrategyGame.Core.Menu;
+using StrategyGame.Core.ContentProvider;
+using StrategyGame.Engine;
 
 
 namespace StrategyGame.Core
@@ -42,14 +46,17 @@ namespace StrategyGame.Core
 			}
 		}
 
-		private const int AMOUNT_FPS = 1000 / 100;
+		private const int AMOUNT_FPS = 1000 / 100;//should be 1000/60, but fps will be 40
+
+		private FpsCounter _fpsCounter;
 
 		private System.Windows.Forms.Timer _timer;
 		private Stopwatch _stopwatch;
 		private RenderFlow _render;
+		private EngineFlow _gameEngine;
 		private GameObject[] _gameObjects;
-
-		private FpsCounter _fpsCounter;
+		//private GameMenu _gameMenu;
+		
 
 		public MainGameFlow(IRenderableFom form)
 		{
@@ -58,31 +65,52 @@ namespace StrategyGame.Core
 			_timer.Tick += TimerTick;
 
 			_stopwatch = new Stopwatch();
-
-			_render = new RenderFlow(form);
-
+			var renderSize = form.GetRenderSize();
+			_render = new RenderFlow(form, new RenderFlowSettings() {
+				MainRenderSize = renderSize, GameLayerSize = new Size(), MenuLayerSize = new Size() });
 			_gameObjects = new GameObject[1] { new Building() };
-
 			_fpsCounter = new FpsCounter();
 		}
+		public void LoadContent()
+		{
+			ContentLoader cl = new ContentLoader();
+			
+			//_gameEngine.LoadContent();
+			//var content = cl.LoadGameData();
 
+		}
 		public void StartGame()
 		{
 			_stopwatch.Start();
-			_timer.Start();			
+			_timer.Start();
 		}
 
-
+		private void MainGameLoop()
+		{
+			_render.DrawGameObjects(_gameObjects);
+			//_render.DrawMenuLayer(_gameMenu);
+			_render.Render();
+#if DEBUG
+			UpdateFpsCounter();
+#endif
+		}		
+		
 		private void TimerTick(object sender, EventArgs e)
 		{
-			MainGameLoop(_stopwatch.ElapsedMilliseconds);
+			MainGameLoop();
 		}
-
-		private void MainGameLoop(long time)
-		{			
-			_render.Draw(_gameObjects);
+		private void UpdateFpsCounter()
+		{
 			_fpsCounter.SetTime(_stopwatch.ElapsedMilliseconds);
 			_render.DrawFps(_fpsCounter.GetFps());
+		}
+		public void MouseUp(MouseEventArgs e)
+		{
+			MainGameLoop();
+		}
+		public void MouseDown(MouseEventArgs e)
+		{
+			MainGameLoop();
 		}
 	}
 }

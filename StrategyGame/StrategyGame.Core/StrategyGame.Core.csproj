@@ -42,11 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentLoader\BitmapProvider.cs" />
+    <Compile Include="ContentProvider\BitmapContentLoader.cs" />
+    <Compile Include="ContentProvider\FileContent.cs" />
     <Compile Include="DebugProvider.cs" />
+    <Compile Include="GameObjects\BitmapContentContainer.cs" />
     <Compile Include="GameObjects\Building.cs" />
     <Compile Include="GameObjects\GameObject.cs" />
     <Compile Include="MainGameFlow.cs" />
+    <Compile Include="Menu\GameMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

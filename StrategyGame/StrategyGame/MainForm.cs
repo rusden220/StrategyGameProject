@@ -22,19 +22,19 @@ namespace StrategyGame
 			InitializeComponent();
 			this.DoubleBuffered = true;
 			_mainGameFlow = new MainGameFlow(this);
+			_mainGameFlow.LoadContent();
 			_mainGameFlow.StartGame();
 			_mainBitmap = new Bitmap(10,10);
-		}
-
-		public void Redraw(Bitmap bitmap)
-		{
-			_mainBitmap = bitmap;
-			this.Invalidate();
 		}
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			e.Graphics.DrawImage(_mainBitmap, 0, 0);
 			base.OnPaint(e);
+		}
+		public void Redraw(Bitmap bitmap)
+		{
+			_mainBitmap = bitmap;
+			this.Invalidate();
 		}
 		public Size GetRenderSize()
 		{
@@ -44,5 +44,17 @@ namespace StrategyGame
 		{
 			this.Text = fps.ToString();
 		}
+		protected override void OnMouseUp(MouseEventArgs e)
+		{
+			_mainGameFlow.MouseUp(e);
+			base.OnMouseUp(e);
+		}
+		protected override void OnMouseDown(MouseEventArgs e)
+		{
+			_mainGameFlow.MouseDown(e);
+			base.OnMouseDown(e);
+		}
+
+
 	}
 }

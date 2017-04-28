@@ -10,6 +10,6 @@ namespace StrategyGame.Render
 	public interface IRenderableObject
 	{
 		Bitmap GetCurrentBitmap();
-		Point GetBitmapPoint();
+		Point GetRenderPoint();
 	}
 }

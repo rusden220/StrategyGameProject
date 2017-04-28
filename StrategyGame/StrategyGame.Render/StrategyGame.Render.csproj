@@ -43,7 +43,7 @@
   <ItemGroup>
     <Compile Include="IRenderableFom.cs" />
     <Compile Include="IRenderableObject.cs" />
-    <Compile Include="ObjectAnimator.cs" />
+    <Compile Include="Animator.cs" />
     <Compile Include="RenderFlow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
